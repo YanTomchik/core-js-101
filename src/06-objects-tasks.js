@@ -20,10 +20,14 @@
  *    console.log(r.height);      // => 20
  *    console.log(r.getArea());   // => 200
  */
-function Rectangle(x, y) {
-  this.width = x;
-  this.height = y;
-  this.getArea = () => this.width * this.height;
+function Rectangle(width, height) {
+  return {
+    width,
+    height,
+    getArea() {
+      return this.width * this.height;
+    },
+  };
 }
 
 
@@ -55,8 +59,8 @@ function getJSON(obj) {
  */
 function fromJSON(proto, json) {
   const obj = JSON.parse(json);
-  const values = Object.values(obj);
-  return new proto.constructor(...values);
+  Object.setPrototypeOf(obj, proto);
+  return obj;
 }
 
 
@@ -143,44 +147,6 @@ const cssSelectorBuilder = {
     throw new Error('Not implemented');
   },
 };
-// const cssSelectorBuilder = {
-//   arr: [],
-//   element(value) {
-//     this.arr.push(value)
-//     return this;
-//   },
-
-//   id(value) {
-//     this.arr.push(`#${value}`);
-//     return this;
-//   },
-
-//   class(/* value */) {
-//     throw new Error('Not implemented');
-//   },
-
-//   attr(/* value */) {
-//     throw new Error('Not implemented');
-//   },
-
-//   pseudoClass(/* value */) {
-//     throw new Error('Not implemented');
-//   },
-
-//   pseudoElement(/* value */) {
-//     throw new Error('Not implemented');
-//   },
-
-//   combine(/* selector1, combinator, selector2 */) {
-//     throw new Error('Not implemented');
-//   },
-//   stringify() {
-//     return this.arr.join('');
-//   }
-// };
-
-// const builder = cssSelectorBuilder;
-// console.log(builder.element('li').id('main').stringify())
 
 
 module.exports = {
