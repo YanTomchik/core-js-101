@@ -183,8 +183,8 @@ return str.toUpperCase();
  *   ],
  *   'info@gmail.com' => ['info@gmail.com']
  */
-function extractEmails(/* str */) {
-  throw new Error('Not implemented');
+function extractEmails(str) {
+  return str.split(';');
 }
 
 /**
@@ -210,8 +210,25 @@ function extractEmails(/* str */) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  function fn(first, inner, last) {
+    const arr = [first];
+    for (let i = 0; i < width - 2; i += 1) {
+      arr.push(inner);
+    }
+    arr.push(`${last}\n`);
+    return arr.join('');
+  }
+  if (width < 2 || height < 2) throw new Error('Not implemented');
+  else {
+    const endArray = [];
+    endArray.push(fn('┌', '─', '┐'));
+    for (let i = 0; i < height - 2; i += 1) {
+      endArray.push(fn('│', ' ', '│'));
+    }
+    endArray.push(fn('└', '─', '┘'));
+    return endArray.join('');
+  }
 }
 
 
@@ -231,8 +248,20 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  function fn(item) {
+    if (!item.match(/[A-Za-zА-Яа-я]/)) return item;
+    let val;
+    if (item === item.toUpperCase()) {
+      val = (item.charCodeAt(0) - 65 + 13) % 26;
+      val += 65;
+    } else {
+      val = (item.charCodeAt(0) - 97 + 13) % 26;
+      val += 97;
+    }
+    return String.fromCharCode(val);
+  }
+  return str.split('').map(fn).join('');
 }
 
 /**
@@ -248,8 +277,8 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  return typeof value === 'string' || value instanceof String;
 }
 
 
@@ -277,8 +306,12 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  const figures = ['♣', '♦', '♥', '♠'];
+  const pos = cards.indexOf(value.slice(0, -1)) + 1;
+  const fig = figures.indexOf(value.charAt(value.length - 1)) * 13;
+  return pos + fig - 1;
 }
 
 
