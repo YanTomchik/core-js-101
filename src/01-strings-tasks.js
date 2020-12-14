@@ -18,8 +18,8 @@
  *   'aa',''    => 'aa'
  *   '',  'bb'  => 'bb'
  */
-function concatenateStrings( value1, value2 ) {
-  return value1.concat(value2);
+function concatenateStrings(value1, value2) {
+  return value1 + value2;
 }
 
 
@@ -51,8 +51,8 @@ function getStringLength(value) {
  *   'John','Doe'      => 'Hello, John Doe!'
  *   'Chuck','Norris'  => 'Hello, Chuck Norris!'
  */
-function getStringFromTemplate( firstName, lastName ) {
-  return `Hello, ${firstName}${lastName}`
+function getStringFromTemplate(firstName, lastName) {
+  return `Hello, ${firstName} ${lastName}!`;
 }
 
 /**
@@ -65,8 +65,8 @@ function getStringFromTemplate( firstName, lastName ) {
  *   'Hello, John Doe!' => 'John Doe'
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
-function extractNameFromTemplate( value ) {
-return value.slice(7,-1);
+function extractNameFromTemplate(value) {
+  return value.slice(7, value.length - 1);
 }
 
 
@@ -80,8 +80,8 @@ return value.slice(7,-1);
  *   'John Doe'  => 'J'
  *   'cat'       => 'c'
  */
-function getFirstChar(str) {
-return str.slice(0,1);
+function getFirstChar(value) {
+  return value.slice(0, 1);
 }
 
 /**
@@ -95,8 +95,8 @@ return str.slice(0,1);
  *   'cat'              => 'cat'
  *   '\tHello, World! ' => 'Hello, World!'
  */
-function removeLeadingAndTrailingWhitespaces(str) {
-  return str.trim();
+function removeLeadingAndTrailingWhitespaces(value) {
+  return value.trim();
 }
 
 /**
@@ -110,12 +110,8 @@ function removeLeadingAndTrailingWhitespaces(str) {
  *   'A', 5  => 'AAAAA'
  *   'cat', 3 => 'catcatcat'
  */
-function repeatString(value, count ) {
-  let arr = [];
-  for(let i = 0; i<count;i++){
-    arr.push(value);
-  }
-  return arr.join('');
+function repeatString(value, count) {
+  return value.repeat(count);
 }
 
 /**
@@ -130,12 +126,8 @@ function repeatString(value, count ) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-function removeFirstOccurrences( str, value ) {
-  if (str.includes(value)) {
-    const ind = str.indexOf(value);
-    return str.slice(0, ind).concat(str.slice(ind + value.length));
-  }
-  return str;
+function removeFirstOccurrences(str, value) {
+  return str.replace(value, '');
 }
 
 /**
@@ -149,8 +141,8 @@ function removeFirstOccurrences( str, value ) {
  *   '<span>' => 'span'
  *   '<a>' => 'a'
  */
-function unbracketTag(str ) {
-  return str.replace('<','').replace('>','')
+function unbracketTag(str) {
+  return str.replace('<', '').replace('>', '');
 }
 
 
@@ -165,7 +157,7 @@ function unbracketTag(str ) {
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
 function convertToUpperCase(str) {
-return str.toUpperCase();
+  return str.toUpperCase();
 }
 
 /**
@@ -211,24 +203,8 @@ function extractEmails(str) {
  *
  */
 function getRectangleString(width, height) {
-  function fn(first, inner, last) {
-    const arr = [first];
-    for (let i = 0; i < width - 2; i += 1) {
-      arr.push(inner);
-    }
-    arr.push(`${last}\n`);
-    return arr.join('');
-  }
-  if (width < 2 || height < 2) throw new Error('Not implemented');
-  else {
-    const endArray = [];
-    endArray.push(fn('┌', '─', '┐'));
-    for (let i = 0; i < height - 2; i += 1) {
-      endArray.push(fn('│', ' ', '│'));
-    }
-    endArray.push(fn('└', '─', '┘'));
-    return endArray.join('');
-  }
+  const str = '─'.repeat(width - 2);
+  return `┌${str}┐\n${`│${' '.repeat(width - 2)}│\n`.repeat(height - 2)}└${str}┘\n`;
 }
 
 
@@ -249,19 +225,24 @@ function getRectangleString(width, height) {
  *
  */
 function encodeToRot13(str) {
-  function fn(item) {
-    if (!item.match(/[A-Za-zА-Яа-я]/)) return item;
-    let val;
-    if (item === item.toUpperCase()) {
-      val = (item.charCodeAt(0) - 65 + 13) % 26;
-      val += 65;
+  const arrEn = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+  const arrEN = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  const arr = str.split('');
+  let newStr = '';
+  arr.forEach((item) => {
+    if (arrEn.indexOf(item) !== -1 && arrEn.indexOf(item) < arrEn.length / 2) {
+      newStr += arrEn[arrEn.indexOf(item) + 13];
+    } else if (arrEn.indexOf(item) !== -1 && arrEn.indexOf(item) >= arrEn.length / 2) {
+      newStr += arrEn[arrEn.indexOf(item) - 13];
+    } else if (arrEN.indexOf(item) !== -1 && arrEN.indexOf(item) >= arrEN.length / 2) {
+      newStr += arrEN[arrEN.indexOf(item) - 13];
+    } else if (arrEN.indexOf(item) !== -1 && arrEN.indexOf(item) < arrEN.length / 2) {
+      newStr += arrEN[arrEN.indexOf(item) + 13];
     } else {
-      val = (item.charCodeAt(0) - 97 + 13) % 26;
-      val += 97;
+      newStr += item;
     }
-    return String.fromCharCode(val);
-  }
-  return str.split('').map(fn).join('');
+  });
+  return newStr;
 }
 
 /**
@@ -278,7 +259,7 @@ function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 function isString(value) {
-  return typeof value === 'string' || value instanceof String;
+  return typeof value === 'string' || value instanceof String || false;
 }
 
 
@@ -307,11 +288,11 @@ function isString(value) {
  *   'K♠' => 51
  */
 function getCardId(value) {
-  const cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
-  const figures = ['♣', '♦', '♥', '♠'];
-  const pos = cards.indexOf(value.slice(0, -1)) + 1;
-  const fig = figures.indexOf(value.charAt(value.length - 1)) * 13;
-  return pos + fig - 1;
+  const arr = ['A♣', '2♣', '3♣', '4♣', '5♣', '6♣', '7♣', '8♣', '9♣', '10♣', 'J♣', 'Q♣', 'K♣',
+    'A♦', '2♦', '3♦', '4♦', '5♦', '6♦', '7♦', '8♦', '9♦', '10♦', 'J♦', 'Q♦', 'K♦',
+    'A♥', '2♥', '3♥', '4♥', '5♥', '6♥', '7♥', '8♥', '9♥', '10♥', 'J♥', 'Q♥', 'K♥',
+    'A♠', '2♠', '3♠', '4♠', '5♠', '6♠', '7♠', '8♠', '9♠', '10♠', 'J♠', 'Q♠', 'K♠'];
+  return arr.indexOf(value);
 }
 
 
